@@ -1,5 +1,5 @@
 package gps;
-import com.alexhogberg.android.bikeparkmaterial.R;
+import com.alexhogberg.android.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.alexhogberg.android.bikeparkmaterial.R;
+import com.alexhogberg.android.R;
 
 import java.util.Collections;
 import java.util.List;

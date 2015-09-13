@@ -9,7 +9,7 @@ import android.location.Location;
 
 import android.content.Context;
 
-import com.alexhogberg.android.bikeparkmaterial.R;
+import com.alexhogberg.android.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
