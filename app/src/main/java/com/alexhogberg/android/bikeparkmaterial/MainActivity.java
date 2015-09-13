@@ -1,24 +1,25 @@
 package com.alexhogberg.android.bikeparkmaterial;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
-import com.alexhogberg.android.R;
 
+import com.alexhogberg.android.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -35,25 +36,28 @@ import java.util.HashMap;
 import gps.GPSListener;
 import map.MapHelper;
 
-public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
+public class MainActivity extends AppCompatActivity {
 
     private LocationManager mLocManager;
     private GPSListener mLocListener;
-    private PackageManager pm;
     private GoogleMap mMap;
     private Marker currentTargetMarker;
     private Marker currentPositionMarker;
     private Polyline mapLine;
     private MapHelper mH;
+    private MainHelper mMainHelper;
 
     //Material Design specifics
-    private Toolbar mToolbar;
-    private FragmentDrawer drawerFragment;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //start helper class
+        mMainHelper = new MainHelper(getApplicationContext());
 
         //Initialize application
         setUpDrawer();
@@ -70,15 +74,44 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     private void setUpDrawer() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        try {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        } catch(Exception e) {
+            Log.e("ACTION_BAR", e.getMessage());
+        }
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        drawerFragment = (FragmentDrawer)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-        drawerFragment.setDrawerListener(this);
+        mDrawerToggle= new ActionBarDrawerToggle(this, mDrawerLayout,mToolbar, R.string.app_name, R.string.app_name);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+        view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                Log.e("ITEM", "selected item: " + menuItem.getItemId());
+                performAction(menuItem.getItemId());
+                mDrawerLayout.closeDrawers();
+                return true;
+            }
+        });
+    }
+
+    private void performAction(int itemId) {
+        switch(itemId) {
+            case R.id.drawer_park:
+                buildQuestionAutoOrManual();
+                break;
+            case R.id.drawer_find:
+                putPositionMarker();
+                break;
+            case R.id.drawer_reset:
+                buildDeleteMessageMarker();
+                break;
+            default:
+                break;
+        }
     }
 
     private void startAds() {
@@ -107,33 +140,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         //Connect to the GPS service
         mLocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocListener = new GPSListener(mMap, currentPositionMarker, currentTargetMarker, this);
-        pm = getApplicationContext().getPackageManager();
-        int hasPerm = pm.checkPermission(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                getApplicationContext().getPackageName());
-        Log.e("PERMISSION", "You have permission: " + hasPerm);
-        Log.e("PERMISSION", "You should have permission: " + PackageManager.PERMISSION_GRANTED);
-        if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+        if (mMainHelper.hasCorrectPermissions()) {
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
                     mLocListener);
-            Log.e("MAP", "Requesting updates!");
         }
     }
 
     private void loadSettings() {
-        HashMap<String, Object> prefs = getSavedPrefs();
+        HashMap<String, Object> prefs = mMainHelper.getSavedPrefs();
         // Load the previous settings if they exist and add a marker
         if ((double) prefs.get("lat") != 0 && (double) prefs.get("lon") != 0) {
             setMarkerWithValues((double) prefs.get("lat"), (double) prefs.get("lon"),
                     new Date((long) prefs.get("date")).toString());
         }
-
     }
 
     /**
      * Creates a marker where the user is located and maps it towards the parked
      * position
-     *
      */
     private void putPositionMarker() {
         if (currentPositionMarker != null)
@@ -142,10 +166,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             mapLine.remove();
 
         if (currentTargetMarker != null) {
-            int hasPerm = pm.checkPermission(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    getApplicationContext().getPackageName());
-            if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+            if (mMainHelper.hasCorrectPermissions()) {
                 Location loc = mLocManager
                         .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 if (loc != null) {
@@ -160,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     mLocListener.setCurrentPosition(newMarker);
 
                     mH.zoomTo(mLocListener.getCurrentPosition());
-            }
+                }
 
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -178,10 +199,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
      * Set a marker at the given GPS coordinates
      */
     private void setMarkerFromPosition() {
-        int hasPerm = pm.checkPermission(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                getApplicationContext().getPackageName());
-        if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+        if (mMainHelper.hasCorrectPermissions()) {
             Location loc = mLocManager
                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc != null) {
@@ -196,26 +214,21 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 mLocListener.setCurrentTarget(currentTargetMarker);
                 currentTargetMarker.showInfoWindow();
                 mH.zoomTo(currentTargetMarker);
-                setSavedPrefs(loc.getLatitude(), loc.getLongitude());
+                mMainHelper.setSavedPrefs(loc.getLatitude(), loc.getLongitude());
             } else {
                 Toast.makeText(getApplicationContext(),
                         R.string.gps_make_sure_enabled,
                         Toast.LENGTH_SHORT).show();
             }
-        } else {
         }
-
     }
 
     /**
      * Sets a marker at a given latitude and longitude
      *
-     * @param lat
-     *            current latitude
-     * @param lon
-     *            current longitude
-     * @param date
-     *            the current date
+     * @param lat  current latitude
+     * @param lon  current longitude
+     * @param date the current date
      */
     private void setMarkerWithValues(double lat, double lon, String date) {
         mMap.clear();
@@ -241,10 +254,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         mLocListener.setCurrentTarget(currentTargetMarker);
         currentTargetMarker.showInfoWindow();
         mH.zoomTo(currentTargetMarker);
-        setSavedPrefs(position.latitude, position.longitude);
+        mMainHelper.setSavedPrefs(position.latitude, position.longitude);
 
         mMap.setOnMapClickListener(null);
     }
+
     /**
      * Clear the map and remove any saved preferences
      */
@@ -256,74 +270,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         mLocListener.setCurrentTarget(null);
         mLocListener.setCurrentPosition(null);
         mLocListener.clear();
-        removeSavedPrefs();
+        mMainHelper.removeSavedPrefs();
     }
 
     private void initialMapZoom() {
-        int hasPerm = pm.checkPermission(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                getApplicationContext().getPackageName());
-        if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+        if (mMainHelper.hasCorrectPermissions()) {
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
                     mLocListener);
             Location loc = mLocManager
                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(loc != null) {
+            if (loc != null) {
                 mH.zoom(loc);
             }
         }
 
 
     }
-
-    /**
-     * Get the saved preferences from previous locations
-     *
-     * @return a hashmap containing where and when the last parking occured
-     */
-    private HashMap<String, Object> getSavedPrefs() {
-        SharedPreferences settings = getSharedPreferences("POSITIONS", 0);
-        HashMap<String, Object> returnMap = new HashMap<String, Object>();
-
-        returnMap.put("lat",
-                Double.longBitsToDouble(settings.getLong("latitude", 0)));
-        returnMap.put("lon",
-                Double.longBitsToDouble(settings.getLong("longitude", 0)));
-        returnMap.put("date", settings.getLong("date", 0));
-        return returnMap;
-    }
-
-    /**
-     * Saves the position in the local phone settings
-     *
-     * @param lat
-     *            latitude to save
-     * @param lon
-     *            longitude to save
-     */
-    private void setSavedPrefs(double lat, double lon) {
-        Date d = new Date();
-        SharedPreferences settings = getSharedPreferences("POSITIONS", 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putLong("latitude", Double.doubleToLongBits(lat));
-        editor.putLong("longitude", Double.doubleToLongBits(lon));
-        editor.putLong("date", d.getTime());
-
-        // Commit the edits!
-        editor.commit();
-    }
-
-    /**
-     * Removes all saved position (used with the reset-button)
-     */
-    private void removeSavedPrefs() {
-        SharedPreferences settings = getSharedPreferences("POSITIONS", 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.clear();
-
-        editor.commit();
-    }
-
 
     /**
      * An alert that is being displayed if you dont have GPS enabled
@@ -401,33 +363,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         alert.show();
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
 
     @Override
-    public void onDrawerItemSelected(View view, int position) {
-        completeAction(position);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    /**
-     * Used for completing actions that are sent from the drawer
-     * @param position
-     */
-    private void completeAction(int position) {
-        switch (position) {
-            case 0:
-                buildQuestionAutoOrManual();
-                break;
-            case 1:
-                putPositionMarker();
-                break;
-            case 2:
-                buildDeleteMessageMarker();
-                break;
-            default:
-                break;
+    @Override
+    public void onBackPressed() {
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawers();
+            return;
         }
+        super.onBackPressed();
     }
 }
-
-
-
-

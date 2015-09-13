@@ -1,15 +1,16 @@
 package gps;
-import com.alexhogberg.android.R;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.Polyline;
 
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.alexhogberg.android.R;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polyline;
 
 import map.MapHelper;
 
@@ -18,7 +19,6 @@ import map.MapHelper;
  * A class that listens to GPS location changes and acts accordingly
  *
  * @author Alexander
- *
  */
 public class GPSListener implements LocationListener {
 
@@ -30,6 +30,7 @@ public class GPSListener implements LocationListener {
     private Polyline mapLine;
     private Context context;
     private MapHelper mH;
+
     /**
      * Updates the users position
      */
@@ -45,12 +46,12 @@ public class GPSListener implements LocationListener {
         this.target = target;
     }
 
-    public void setCurrentPosition(Marker position) {
-        this.position = position;
-    }
-
     public Marker getCurrentPosition() {
         return position;
+    }
+
+    public void setCurrentPosition(Marker position) {
+        this.position = position;
     }
 
     public void clear() {
@@ -71,7 +72,7 @@ public class GPSListener implements LocationListener {
                 position.setPosition(currPos);
                 double distance = mH.getDistance(position.getPosition(), target.getPosition());
 
-                if(distance > ARRIVED_RANGE)
+                if (distance > ARRIVED_RANGE)
                     position.setTitle(context.getString(R.string.you_are_here_start) + distance + context.getString(R.string.you_are_here_end));
                 else
                     position.setTitle(context.getString(R.string.you_have_arrived));

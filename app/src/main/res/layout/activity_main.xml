@@ -1,9 +1,11 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
 
     <LinearLayout
@@ -25,7 +27,7 @@
         <FrameLayout
             android:id="@+id/container_body"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="0.78">
 
             <LinearLayout
@@ -50,7 +52,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:id="@+id/adLayout"></LinearLayout>
+                    android:id="@+id/adLayout"/>
             </LinearLayout>
 
         </FrameLayout>
@@ -59,13 +61,12 @@
     </LinearLayout>
 
 
-    <fragment
-        android:id="@+id/fragment_navigation_drawer"
-        android:name="com.alexhogberg.android.bikeparkmaterial.FragmentDrawer"
-        android:layout_width="@dimen/nav_drawer_width"
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:layout="@layout/fragment_navigation_drawer"
-        tools:layout="@layout/fragment_navigation_drawer" />
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/menu_main"/>
 
 </android.support.v4.widget.DrawerLayout>
