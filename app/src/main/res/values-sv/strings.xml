@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BikeParkMaterial</string>
-    <string name="action_settings">Inställningar</string>
-    <string name="find">Hitta</string>
-    <string name="hello_world">Hej världen!</string>
-    <string name="park">Parkera</string>
-    <string name="reset">Återställ</string>
-    <string name="action_websearch">Sök på webben</string>
-    <string name="app_not_available">Finns ingen webbläsare tillgänglig</string>
-    <string name="drawer_close">Stäng navigering</string>
-    <string name="drawer_open">Öppna navigering</string>
+    <string name="app_name">Var är min cykel?</string>
     <string name="action_search">Sök</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="dialog_cancel">Avbryt</string>
+    <string name="dialog_gps">Automatiskt</string>
+    <string name="dialog_manual">Manuellt</string>
+    <string name="dialog_reset">Återställ</string>
+    <string name="dialog_title_reset">Är du säker på att du vill återställa?</string>
+    <string name="dialog_title_select_method">Var god välj metod för markering</string>
+    <string name="drawer_close">Stäng</string>
+    <string name="drawer_open">Öppna</string>
+    <string name="global_no">Nej</string>
+    <string name="global_yes">Ja</string>
+    <string name="gps_disabled">Din GPS verkar vara avstängd, vill du starta den?</string>
+    <string name="gps_make_sure_enabled">Var god kontrollera att GPS är igång</string>
+    <string name="last_parking">Senaste parkering:</string>
     <string name="nav_item_find">Hitta</string>
     <string name="nav_item_park">Parkera</string>
     <string name="nav_item_reset">Återställ</string>
+    <string name="nav_title">Åtgärder</string>
+    <string name="no_previous_parkings">Du har inga tidigare parkeringar!</string>
+    <string name="permission_required">Detta kräver särskilda tillstånd!</string>
+    <string name="you_are_here_end"> m bort)</string>
+    <string name="you_are_here_start">Du är här! (</string>
+    <string name="you_have_arrived">Du har anlänt!</string>
+
 </resources>

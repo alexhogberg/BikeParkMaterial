@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
-        mH = new MapHelper(mMap);
+        mH = new MapHelper(mMap, getApplicationContext());
         mH.generateMapOptions();
 
         //Connect to the GPS service

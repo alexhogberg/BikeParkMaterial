@@ -1,4 +1,5 @@
 package gps;
+import com.alexhogberg.android.bikeparkmaterial.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -37,7 +38,7 @@ public class GPSListener implements LocationListener {
         position = currentPosition;
         context = c;
         map = googleMap;
-        mH = new MapHelper(map);
+        mH = new MapHelper(map, c);
     }
 
     public void setCurrentTarget(Marker target) {
@@ -71,16 +72,16 @@ public class GPSListener implements LocationListener {
                 double distance = mH.getDistance(position.getPosition(), target.getPosition());
 
                 if(distance > ARRIVED_RANGE)
-                    position.setTitle("You are here! (" + distance + " m away)");
+                    position.setTitle(context.getString(R.string.you_are_here_start) + distance + context.getString(R.string.you_are_here_end));
                 else
-                    position.setTitle("You have arrived!");
+                    position.setTitle(context.getString(R.string.you_have_arrived));
 
 
                 mapLine = mH.DrawLine(target, position);
                 position.showInfoWindow();
                 if (mH.getDistance(target.getPosition(),
                         position.getPosition()) < ARRIVED_RANGE) {
-                    position.setTitle("You have arrived!");
+                    position.setTitle(context.getString(R.string.you_have_arrived));
                 }
             }
         }
@@ -88,13 +89,13 @@ public class GPSListener implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(context.getApplicationContext(), "Gps Disabled",
+        Toast.makeText(context.getApplicationContext(), context.getString(R.string.gps_disabled_short),
                 Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(context.getApplicationContext(), "Gps Enabled",
+        Toast.makeText(context.getApplicationContext(), context.getString(R.string.gps_enabled_short),
                 Toast.LENGTH_SHORT).show();
     }
 

@@ -7,6 +7,9 @@ import java.util.Locale;
 import android.graphics.Color;
 import android.location.Location;
 
+import android.content.Context;
+
+import com.alexhogberg.android.bikeparkmaterial.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,9 +26,11 @@ public class MapHelper {
     private GoogleMap currentMap;
     private SimpleDateFormat dateFormat = new SimpleDateFormat(
             "EEEE, LLLL M y H:m:s", Locale.ENGLISH);
+    private Context mContext;
 
-    public MapHelper(GoogleMap map) {
+    public MapHelper(GoogleMap map, Context ctx) {
         currentMap = map;
+        mContext = ctx;
     }
 
     public void generateMapOptions() {
@@ -60,9 +65,6 @@ public class MapHelper {
 
     /**
      * Draws a line between the currentMarker and another point
-     * @param map the map to draw on
-     * @param lat latitude
-     * @param lat longitude
      */
     public Polyline DrawLine(Marker start, Marker stop) {
         Polyline mapLine;
@@ -108,7 +110,7 @@ public class MapHelper {
         if(title == null) {
             Date d = new Date();
             String formattedDate = dateFormat.format(d);
-            mO.title("Last parking: " + formattedDate);
+            mO.title(mContext.getString(R.string.last_parking)+ " " + formattedDate);
         } else {
             mO.title(title);
         }
@@ -122,9 +124,9 @@ public class MapHelper {
         MarkerOptions mO = new MarkerOptions();
         mO.position(position);
 
-        String prefix = "You are here! (";
+        String prefix = mContext.getString(R.string.you_are_here_start);
         double distance = getDistance(target.getPosition(),position);
-        String suffix = " m away)";
+        String suffix = mContext.getString(R.string.you_are_here_end);
         String title = prefix + "" + distance + "" + suffix;
 
         mO.title(title);
