@@ -25,22 +25,33 @@
         <FrameLayout
             android:id="@+id/container_body"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.78" >
-
-            <fragment
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:name="com.google.android.gms.maps.MapFragment"
-                android:id="@+id/map"
-                tools:layout="@layout/abc_alert_dialog_material" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.78">
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal|bottom"
-                android:id="@+id/adLayout"></LinearLayout>
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:weightSum="1"
+                android:gravity="fill_horizontal|fill_vertical"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp">
+                
+                <fragment
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:name="com.google.android.gms.maps.MapFragment"
+                    android:id="@+id/map"
+                    tools:layout="@android:layout/simple_gallery_item"
+                    android:layout_weight="1.00"
+                    android:layout_gravity="center_vertical" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/adLayout"></LinearLayout>
+            </LinearLayout>
 
         </FrameLayout>
 

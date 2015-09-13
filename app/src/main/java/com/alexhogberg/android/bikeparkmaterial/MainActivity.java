@@ -1,7 +1,6 @@
 package com.alexhogberg.android.bikeparkmaterial;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,16 +10,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +31,9 @@ import com.google.android.gms.maps.model.Polyline;
 
 import java.util.Date;
 import java.util.HashMap;
+
+import gps.GPSListener;
+import map.MapHelper;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -81,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 lnrMain.addView(adView);
             }
         });
-    /*
+
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
@@ -112,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
-        */
     }
 
     @Override

@@ -1,5 +1,4 @@
-package com.alexhogberg.android.bikeparkmaterial;
-import com.alexhogberg.android.bikeparkmaterial.*;
+package gps;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -10,6 +9,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import map.MapHelper;
 
 
 /**

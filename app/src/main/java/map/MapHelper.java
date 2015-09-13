@@ -1,4 +1,4 @@
-package com.alexhogberg.android.bikeparkmaterial;
+package map;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
