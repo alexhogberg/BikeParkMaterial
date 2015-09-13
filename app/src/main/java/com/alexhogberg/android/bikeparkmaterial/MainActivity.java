@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 
+import java.io.Console;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -92,9 +94,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         int hasPerm = pm.checkPermission(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 getApplicationContext().getPackageName());
-        if (hasPerm != PackageManager.PERMISSION_GRANTED) {
+        Log.e("PERMISSION", "You have permission: " + hasPerm);
+        Log.e("PERMISSION", "You should have permission: " + PackageManager.PERMISSION_GRANTED);
+        if (hasPerm == PackageManager.PERMISSION_GRANTED) {
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
                     mLocListener);
+            Log.e("MAP", "Requesting updates!");
         }
 
 
@@ -109,28 +114,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void loadSettings() {
@@ -158,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             int hasPerm = pm.checkPermission(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     getApplicationContext().getPackageName());
-            if (hasPerm != PackageManager.PERMISSION_GRANTED) {
+            if (hasPerm == PackageManager.PERMISSION_GRANTED) {
                 Location loc = mLocManager
                         .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 if (loc != null) {
@@ -194,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         int hasPerm = pm.checkPermission(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 getApplicationContext().getPackageName());
-        if (hasPerm != PackageManager.PERMISSION_GRANTED) {
+        if (hasPerm == PackageManager.PERMISSION_GRANTED) {
             Location loc = mLocManager
                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc != null) {
@@ -271,25 +254,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         mLocListener.clear();
         removeSavedPrefs();
     }
-    private boolean doesUserHavePermission(String permission)
-    {
-        int result = getApplicationContext().checkCallingOrSelfPermission(permission);
-        return result == PackageManager.PERMISSION_GRANTED;
-    }
 
     private void initialMapZoom() {
         int hasPerm = pm.checkPermission(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 getApplicationContext().getPackageName());
-        if (hasPerm != PackageManager.PERMISSION_GRANTED) {
+        if (hasPerm == PackageManager.PERMISSION_GRANTED) {
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
                     mLocListener);
-        }
-        if(doesUserHavePermission("Manifest.permission.ACCESS_COARSE_LOCATION")) {
             Location loc = mLocManager
                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(loc != null)
+            if(loc != null) {
                 mH.zoom(loc);
+            }
         }
 
 
@@ -423,7 +400,27 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
+        completeAction(position);
+    }
 
+    /**
+     * Used for completing actions that are sent from the drawer
+     * @param position
+     */
+    private void completeAction(int position) {
+        switch (position) {
+            case 0:
+                buildQuestionAutoOrManual();
+                break;
+            case 1:
+                putPositionMarker();
+                break;
+            case 2:
+                buildDeleteMessageMarker();
+                break;
+            default:
+                break;
+        }
     }
 }
 
