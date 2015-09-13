@@ -1,8 +1,10 @@
 package map;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
+import android.preference.PreferenceManager;
 
 import com.alexhogberg.android.R;
 import com.google.android.gms.maps.CameraUpdate;
@@ -26,15 +28,36 @@ public class MapHelper {
     private SimpleDateFormat dateFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     private Context mContext;
+    private SharedPreferences mPreferences;
+
 
     public MapHelper(GoogleMap map, Context ctx) {
         currentMap = map;
         mContext = ctx;
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
     public void generateMapOptions() {
+
+        int mType = GoogleMap.MAP_TYPE_NORMAL;
+
+        String mapType = mPreferences.getString("map_type", "HYBRID");
+        switch(mapType) {
+            case "HYBRID":
+                mType = GoogleMap.MAP_TYPE_HYBRID;
+                break;
+            case "ROADMAP":
+                mType = GoogleMap.MAP_TYPE_NORMAL;
+                break;
+            case "TERRAIN":
+                mType = GoogleMap.MAP_TYPE_TERRAIN;
+                break;
+            case "SATELLITE":
+                mType = GoogleMap.MAP_TYPE_SATELLITE;
+        }
+
+        currentMap.setMapType(mType);
         currentMap.setIndoorEnabled(true);
-        currentMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 
     /**

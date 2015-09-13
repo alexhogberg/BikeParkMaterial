@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -36,8 +38,9 @@ import java.util.HashMap;
 import gps.GPSListener;
 import map.MapHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final int SETTINGS_RESULT = 1;
     private LocationManager mLocManager;
     private GPSListener mLocListener;
     private GoogleMap mMap;
@@ -55,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
         //start helper class
         mMainHelper = new MainHelper(getApplicationContext());
 
@@ -109,9 +113,19 @@ public class MainActivity extends AppCompatActivity {
             case R.id.drawer_reset:
                 buildDeleteMessageMarker();
                 break;
+            case R.id.drawer_settings:
+                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivityForResult(i, SETTINGS_RESULT);
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        Log.e("PREF CHANGE", "The following preference was changed:" + key);
+        if ("map_type".equals(key))
+            mH.generateMapOptions();
     }
 
     private void startAds() {
