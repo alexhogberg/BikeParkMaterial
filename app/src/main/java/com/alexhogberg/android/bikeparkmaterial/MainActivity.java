@@ -57,6 +57,21 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Initialize application
+        setUpDrawer();
+        startAds();
+        setUpMap();
+        initialMapZoom();
+        // If the user has closed the app with a present parking, load these
+        // settings
+        loadSettings();
+        // If GPS is disabled, send warning
+        if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+        }
+    }
+
+    private void setUpDrawer() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(mToolbar);
@@ -66,7 +81,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
+    }
 
+    private void startAds() {
         final LinearLayout lnrMain = (LinearLayout) findViewById(R.id.adLayout);
         runOnUiThread(new Runnable() {
             @Override
@@ -80,7 +97,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 lnrMain.addView(adView);
             }
         });
+    }
 
+    private void setUpMap() {
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
@@ -100,19 +119,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
                     mLocListener);
             Log.e("MAP", "Requesting updates!");
-        }
-
-
-        initialMapZoom();
-
-        // If the user has closed the app with a present parking, load these
-        // settings
-        loadSettings();
-
-
-        // If GPS is disabled, send warning
-        if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
         }
     }
 
@@ -160,12 +166,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             } else {
                 Toast.makeText(getApplicationContext(),
-                        "You need to permit the application!",
+                        R.string.permission_required,
                         Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(getApplicationContext(),
-                    "You have no previous parkings!",
+                    R.string.no_previous_parkings,
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -195,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 setSavedPrefs(loc.getLatitude(), loc.getLongitude());
             } else {
                 Toast.makeText(getApplicationContext(),
-                        "Please make sure that the GPS is enabled.",
+                        R.string.gps_make_sure_enabled,
                         Toast.LENGTH_SHORT).show();
             }
         } else {
@@ -218,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (currentPositionMarker != null)
             currentPositionMarker = null;
         LatLng currPos = new LatLng(lat, lon);
-        String title = "Last parking: " + date;
+        String title = R.string.last_parking + " " + date;
         currentTargetMarker = mMap.addMarker(mH.createTargetMarker(currPos, title));
         mLocListener.setCurrentTarget(currentTargetMarker);
         currentTargetMarker.showInfoWindow();
@@ -327,9 +333,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(
-                "Your GPS seems to be disabled, do you want to enable it?")
+                R.string.gps_disabled)
                 .setCancelable(false)
-                .setPositiveButton("Yes",
+                .setPositiveButton(R.string.global_yes,
                         new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog,
                                                 final int id) {
@@ -337,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                             }
                         })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.global_no, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog,
                                         final int id) {
                         dialog.cancel();
@@ -349,16 +355,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private void buildDeleteMessageMarker() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to reset?")
+        builder.setMessage(R.string.dialog_title_reset)
                 .setCancelable(true)
-                .setPositiveButton("Yes",
+                .setPositiveButton(R.string.dialog_reset,
                         new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog,
                                                 final int id) {
                                 clearMap();
                             }
                         })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog,
                                         final int id) {
 
@@ -370,16 +376,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private void buildQuestionAutoOrManual() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Please select the method to use")
+        builder.setMessage(R.string.dialog_title_select_method)
                 .setCancelable(true)
-                .setPositiveButton("Automatically (GPS)",
+                .setPositiveButton(R.string.dialog_gps,
                         new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog,
                                                 final int id) {
                                 setMarkerFromPosition();
                             }
                         })
-                .setNegativeButton("Manual",
+                .setNegativeButton(R.string.dialog_manual,
                         new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog,
                                                 final int id) {

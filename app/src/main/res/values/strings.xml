@@ -5,6 +5,24 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
+    <string name="global_yes">Yes</string>
+    <string name="global_no">No</string>
+
+    <string name="last_parking">Last parking:</string>
+
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_reset">Reset</string>
+    <string name="dialog_manual">Manually</string>
+    <string name="dialog_gps">Automatically</string>
+    <string name="dialog_title_select_method">Please select the method to use</string>
+    <string name="dialog_title_reset">Are you sure you want to reset?</string>
+
+    <string name="gps_disabled">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="gps_make_sure_enabled">Please make sure that the GPS is enabled.</string>
+
+    <string name="no_previous_parkings">You have no previous parkings!</string>
+    <string name="permission_required">This requires a certain permission!</string>
+
     <string name="nav_title">Actions</string>
 
     <string name="nav_item_park">Park</string>
