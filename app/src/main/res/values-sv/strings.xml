@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BikeParkMaterial</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="find">Hitta</string>
+    <string name="hello_world">Hej världen!</string>
+    <string name="park">Parkera</string>
+    <string name="reset">Återställ</string>
+    <string name="action_websearch">Sök på webben</string>
+    <string name="app_not_available">Finns ingen webbläsare tillgänglig</string>
+    <string name="drawer_close">Stäng navigering</string>
+    <string name="drawer_open">Öppna navigering</string>
+    <string name="action_search">Sök</string>
+    <string name="nav_item_find">Hitta</string>
+    <string name="nav_item_park">Parkera</string>
+    <string name="nav_item_reset">Återställ</string>
+</resources>
