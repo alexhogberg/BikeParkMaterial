@@ -5,6 +5,11 @@
         <item android:title="Main">
             <menu>
                 <item
+                    android:id="@+id/drawer_home"
+                    android:checked="true"
+                    android:icon="@drawable/ic_action_map"
+                    android:title="@string/nav_item_map"/>
+                <item
                     android:id="@+id/drawer_park"
                     android:checked="true"
                     android:icon="@drawable/ic_action_park"

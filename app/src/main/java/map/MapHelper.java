@@ -21,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import model.Parking;
+
 public class MapHelper {
 
     private static final int ZOOM_LEVEL = 18;
@@ -136,11 +138,17 @@ public class MapHelper {
             Date d = new Date();
             String formattedDate = dateFormat.format(d);
             mO.title(mContext.getString(R.string.last_parking) + " " + formattedDate);
+
+            //Store the parking in an object
+            Parking parking = new Parking(d, position);
         } else {
             mO.title(title);
         }
 
         mO.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+
+
 
         return mO;
     }

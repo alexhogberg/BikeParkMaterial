@@ -31,7 +31,8 @@
     <string name="gps_disabled_short">"GPS Disabled"</string>
     <string name="gps_enabled_short">GPS Enabled</string>
 
-    <string name="nav_item_park">Park</string>
+    <string name="nav_item_map">Home</string>
+    <string name="nav_item_park">Parkings</string>
     <string name="nav_item_find">Find</string>
     <string name="nav_item_reset">Reset</string>
     <string name="nav_item_settings">Settings</string>
@@ -39,12 +40,14 @@
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_map</item>
         <item>@string/nav_item_park</item>
         <item>@string/nav_item_find</item>
         <item>@string/nav_item_reset</item>
     </string-array>
 
     <string-array name="nav_drawer_icon">
+        <item>@drawable/ic_action_map</item>
         <item>@drawable/ic_action_park</item>
         <item>@drawable/ic_action_find</item>
         <item>@drawable/ic_action_reset</item>
