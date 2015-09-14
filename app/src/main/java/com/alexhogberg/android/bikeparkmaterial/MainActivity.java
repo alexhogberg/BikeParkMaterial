@@ -297,8 +297,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 mH.zoom(loc);
             }
         }
-
-
     }
 
     /**
