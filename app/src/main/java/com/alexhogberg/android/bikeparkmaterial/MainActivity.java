@@ -21,6 +21,14 @@ import com.alexhogberg.android.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.List;
+
+import db.ParkingDBHelper;
+import map.CustomMapFragment;
+import model.Parking;
+import parking.ParkingFragment;
+import setting.SettingsActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int SETTINGS_RESULT = 1;
@@ -28,24 +36,32 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    //Database connection
+    private ParkingDBHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //start helper class
+        db = new ParkingDBHelper(this);
+        // Reading all contacts
+        Log.d("Reading: ", "Reading all contacts..");
+
+        List<Parking> parkings = db.getAllParkings();
+
+        for (Parking pn : parkings) {
+            String log = "Id: " + pn.getId() + " ,Date: " + pn.getDate() + " ,Position: " + pn.getPosition().toString();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
+        }
 
         //Initialize application
         setUpDrawer();
         startAds();
-        //setUpMap();
-        //initialMapZoom();
-        // If the user has closed the app with a present parking, load these
-        // settings
-        //loadSettings();
-        // If GPS is disabled, send warning
-        //if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-        //    buildAlertMessageNoGps();
-        //}
+
+        performAction(R.id.drawer_home);
     }
 
     private void startAds() {
@@ -91,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.drawer_park:
                 fragment = new ParkingFragment();
-                title = getString(R.string.nav_item_map);
+                title = getString(R.string.nav_item_park);
                 break;
             case R.id.drawer_find:
                 break;

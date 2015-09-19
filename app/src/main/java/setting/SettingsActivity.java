@@ -1,11 +1,7 @@
-package com.alexhogberg.android.bikeparkmaterial;
+package setting;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 /**
  * Created by Alexander on 2015-09-13.

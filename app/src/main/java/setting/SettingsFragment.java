@@ -1,4 +1,4 @@
-package com.alexhogberg.android.bikeparkmaterial;
+package setting;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

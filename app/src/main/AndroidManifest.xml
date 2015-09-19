@@ -32,8 +32,8 @@
 
         <activity android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
-        <activity android:name=".bikeparkmaterial.SettingsActivity"></activity>
-        <activity android:name=".bikeparkmaterial.MapFragmentActivity"></activity>
+        <activity android:name="setting.SettingsActivity"></activity>
+        <activity android:name="map.MapFragmentActivity"></activity>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBdeCAqAc4bfBodHHV68X-ZNKoYn43GKxQ" />

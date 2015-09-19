@@ -1,4 +1,4 @@
-package com.alexhogberg.android.bikeparkmaterial;
+package map;
 
 /**
  * Created by Alexander on 2015-09-14.
@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexhogberg.android.R;
+import com.alexhogberg.android.bikeparkmaterial.MainHelper;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;

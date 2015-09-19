@@ -1,4 +1,4 @@
-package com.alexhogberg.android.bikeparkmaterial;
+package map;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alexhogberg.android.R;
+import com.alexhogberg.android.bikeparkmaterial.MainHelper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
