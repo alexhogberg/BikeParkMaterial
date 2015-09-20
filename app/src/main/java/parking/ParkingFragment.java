@@ -41,7 +41,7 @@ public class ParkingFragment extends Fragment {
         ArrayList<Parking> parkings = (ArrayList) db.getAllParkings();
         // Construct the data source
         // Create the adapter to convert the array to views
-        Parking.ParkingAdapter adapter = new Parking.ParkingAdapter(getContext(), parkings);
+        ParkingAdapter adapter = new ParkingAdapter(getContext(), parkings);
         // Attach the adapter to a ListView
         ListView listView = (ListView) rootView.findViewById(R.id.parkings);
         listView.setAdapter(adapter);
